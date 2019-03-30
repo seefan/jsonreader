@@ -117,9 +117,9 @@ func (v JsonValue) Bytes() []byte {
 func (v JsonValue) IsEmpty() bool {
 	return v == ""
 }
-func (v JsonValue) JsonObject() *JsonObject {
+func (v JsonValue) ParseJsonObject() *jsonObject {
 	return ParseJsonObject([]byte(v))
 }
-func (v JsonValue) JsonArray() *JsonArray {
+func (v JsonValue) ParseJsonArray() *jsonArray {
 	return ParseJsonArray([]byte(v))
 }

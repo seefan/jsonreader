@@ -1,19 +1,19 @@
 /*
 @Time : 2019-03-27 13:54
 @Author : seefan
-@File : JsonObject
+@File : jsonObject
 @Software: jsonreader
 */
 package jsonreader
 
-type JsonObject struct {
+type jsonObject struct {
 	reader
 	val map[string]JsonValue
-	obj map[string]*JsonObject
-	arr map[string]*JsonArray
+	obj map[string]*jsonObject
+	arr map[string]*jsonArray
 }
 
-func (j *JsonObject) parse() {
+func (j *jsonObject) parse() {
 	if !j.validObject() {
 		j.end = -1
 		return
@@ -40,55 +40,55 @@ func (j *JsonObject) parse() {
 	}
 }
 
-func ParseJsonObject(bs []byte) *JsonObject {
-	j := &JsonObject{
+func ParseJsonObject(bs []byte) *jsonObject {
+	j := &jsonObject{
 		reader: *newReader(bs),
 		val:    make(map[string]JsonValue),
 	}
 	j.parse()
 	return j
 }
-func (j *JsonObject) GetJsonValue(name string) JsonValue {
+func (j *jsonObject) GetValue(name string) JsonValue {
 	if v, ok := j.val[name]; ok {
 		return v
 	}
 	return "name not exists"
 }
-func (j *JsonObject) GetJsonObject(name string) *JsonObject {
+func (j *jsonObject) GetObject(name string) *jsonObject {
 	if j.obj != nil {
 		if v, ok := j.obj[name]; ok {
 			return v
 		}
 	}
-	return j.GetJsonObjectForce(name)
+	return j.GetObjectForce(name)
 }
-func (j *JsonObject) GetJsonObjectForce(name string) *JsonObject {
+func (j *jsonObject) GetObjectForce(name string) *jsonObject {
 	if v, ok := j.val[name]; ok {
 		if j.obj == nil {
-			j.obj = make(map[string]*JsonObject)
+			j.obj = make(map[string]*jsonObject)
 		}
 		j.obj[name] = ParseJsonObject(v.Bytes())
 		return j.obj[name]
 	}
-	return &JsonObject{
+	return &jsonObject{
 		val: make(map[string]JsonValue),
 	}
 }
-func (j *JsonObject) GetJsonArray(name string) *JsonArray {
+func (j *jsonObject) GetArray(name string) *jsonArray {
 	if j.arr != nil {
 		if v, ok := j.arr[name]; ok {
 			return v
 		}
 	}
-	return j.GetJsonArrayForce(name)
+	return j.GetArrayForce(name)
 }
-func (j *JsonObject) GetJsonArrayForce(name string) *JsonArray {
+func (j *jsonObject) GetArrayForce(name string) *jsonArray {
 	if v, ok := j.val[name]; ok {
 		if j.arr == nil {
-			j.arr = make(map[string]*JsonArray)
+			j.arr = make(map[string]*jsonArray)
 		}
 		j.arr[name] = ParseJsonArray(v.Bytes())
 		return j.arr[name]
 	}
-	return &JsonArray{}
+	return &jsonArray{}
 }

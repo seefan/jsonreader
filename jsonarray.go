@@ -6,32 +6,32 @@
 */
 package jsonreader
 
-type JsonArray struct {
+type jsonArray struct {
 	reader
 	arr []JsonValue
 }
 
-func (j *JsonArray) Get(i int) JsonValue {
+func (j *jsonArray) Get(i int) JsonValue {
 	return j.arr[i]
 }
-func (j *JsonArray) Size() int {
+func (j *jsonArray) Size() int {
 	return len(j.arr)
 }
-func ParseJsonArray(bs []byte) *JsonArray {
-	j := &JsonArray{
+func ParseJsonArray(bs []byte) *jsonArray {
+	j := &jsonArray{
 		reader: *newReader(bs),
 	}
 	j.parse()
 	return j
 }
-func (j *JsonArray) each(f func(int, JsonValue)) {
+func (j *jsonArray) Each(f func(int, JsonValue)) {
 	if j.arr != nil {
 		for i, v := range j.arr {
 			f(i, v)
 		}
 	}
 }
-func (j *JsonArray) parse() {
+func (j *jsonArray) parse() {
 	if !j.validArray() {
 		j.end = -1
 		return
