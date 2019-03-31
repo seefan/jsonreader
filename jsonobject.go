@@ -48,11 +48,14 @@ func ParseJsonObject(bs []byte) *jsonObject {
 	j.parse()
 	return j
 }
-func (j *jsonObject) GetValue(name string) JsonValue {
-	if v, ok := j.val[name]; ok {
-		return v
+func (j *jsonObject) Contains(name string) bool {
+	if _, ok := j.val[name]; ok {
+		return true
 	}
-	return "name not exists"
+	return false
+}
+func (j *jsonObject) GetValue(name string) JsonValue {
+	return j.val[name]
 }
 func (j *jsonObject) GetObject(name string) *jsonObject {
 	if j.obj != nil {
