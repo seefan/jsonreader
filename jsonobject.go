@@ -20,9 +20,9 @@ func (j *jsonObject) parse() {
 	}
 
 	//remove {}
-	j.start++
+	j.index++
 	j.end--
-	for j.start <= j.end {
+	for j.index <= j.end {
 		j.skip()
 		if !j.IsValid() {
 			break

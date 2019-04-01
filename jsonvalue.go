@@ -95,7 +95,13 @@ func (v JsonValue) Float32() float32 {
 
 //返回 bool 类型的值
 func (v JsonValue) Bool() bool {
-	return v == "1"
+	return v == "true"
+}
+
+//return is null
+// v=='null'
+func (v JsonValue) IsNull() bool {
+	return v == "null"
 }
 
 //返回 time.Time 类型的值

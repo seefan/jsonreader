@@ -33,32 +33,37 @@ func (j *jsonArray) Each(f func(int, JsonValue)) {
 }
 func (j *jsonArray) parse() {
 	if !j.validArray() {
+		j.LastError = "JsonArray format error"
 		j.end = -1
 		return
 	}
 	//remove []
-	j.start++
+	j.index++
 	j.end--
-	start := j.start
-	str := false
+	start := j.index
+	str := 0
 	depth := 0
-	for j.start <= j.end {
-		switch j.data[j.start] {
+	for j.index < j.end {
+		switch j.data[j.index] {
 		case '[', '{':
 			depth++
 		case ']', '}':
 			depth--
 		case '"':
-			str = !str
+			str++
+		case '\\':
+			if j.index+1 < j.end && j.data[j.index+1] == '"' {
+				j.index++
+			}
 		case ',':
-			if depth == 0 {
-				j.arr = append(j.arr, JsonValue(j.data[start:j.start]))
-				start = j.start + 1
+			if depth == 0 && str%2 == 0 {
+				j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+				start = j.index + 1
 			}
 		}
-		j.start++
+		j.index++
 	}
-	if start < j.start {
-		j.arr = append(j.arr, JsonValue(j.data[start:j.start]))
+	if start < j.index {
+		j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
 	}
 }
