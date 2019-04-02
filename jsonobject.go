@@ -27,13 +27,13 @@ func (j *jsonObject) parse() {
 		if !j.IsValid() {
 			break
 		}
-		key := j.parseString()
+		key := unescape(j.parseString())
 		j.skipSplit()
 		if !j.IsValid() {
 			break
 		}
 		value := j.parseValue()
-		j.val[string(key)] = JsonValue(value)
+		j.val[key] = JsonValue(value)
 		if !j.hasMore() {
 			break
 		}

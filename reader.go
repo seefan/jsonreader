@@ -72,6 +72,43 @@ func (r *reader) parseString() []byte {
 	r.end = -1
 	return nil
 }
+func unescape(json []byte) string {
+	var str = make([]byte, 0, len(json))
+	for i := 0; i < len(json); i++ {
+		switch {
+		default:
+			str = append(str, json[i])
+		case json[i] < ' ': //skip
+		case json[i] > '~': //skip
+		case json[i] == '\\':
+			i++
+			if i >= len(json) {
+				return string(str)
+			}
+			switch json[i] {
+			default:
+				return string(str)
+			case '\\':
+				str = append(str, '\\')
+			case '/':
+				str = append(str, '/')
+			case 'b':
+				str = append(str, '\b')
+			case 'f':
+				str = append(str, '\f')
+			case 'n':
+				str = append(str, '\n')
+			case 'r':
+				str = append(str, '\r')
+			case 't':
+				str = append(str, '\t')
+			case '"':
+				str = append(str, '"')
+			}
+		}
+	}
+	return string(str)
+}
 func (r *reader) validObject() bool {
 	r.trim()
 	if r.index < r.end {
