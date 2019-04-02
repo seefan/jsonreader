@@ -67,3 +67,10 @@ func TestJsonValue_Number(t *testing.T) {
 		t.Error("number parse error")
 	}
 }
+func TestJsonValue_Escape(t *testing.T) {
+	obj := ParseJsonObject([]byte("{\"key\":\"\t\n\"}"))
+	v := obj.GetValue("key")
+	if v != "\t\n" {
+		t.Error("escape parse error")
+	}
+}
