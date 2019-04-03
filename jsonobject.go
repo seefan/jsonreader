@@ -48,14 +48,23 @@ func ParseJsonObject(bs []byte) *jsonObject {
 	j.parse()
 	return j
 }
+func (j *jsonObject) C(name string) bool {
+	return j.Contains(name)
+}
 func (j *jsonObject) Contains(name string) bool {
 	if _, ok := j.val[name]; ok {
 		return true
 	}
 	return false
 }
+func (j *jsonObject) V(name string) JsonValue {
+	return j.GetValue(name)
+}
 func (j *jsonObject) GetValue(name string) JsonValue {
 	return j.val[name]
+}
+func (j *jsonObject) O(name string) *jsonObject {
+	return j.GetObject(name)
 }
 func (j *jsonObject) GetObject(name string) *jsonObject {
 	if j.obj != nil {
@@ -76,6 +85,9 @@ func (j *jsonObject) GetObjectForce(name string) *jsonObject {
 	return &jsonObject{
 		val: make(map[string]JsonValue),
 	}
+}
+func (j *jsonObject) A(name string) *jsonArray {
+	return j.GetArray(name)
 }
 func (j *jsonObject) GetArray(name string) *jsonArray {
 	if j.arr != nil {
