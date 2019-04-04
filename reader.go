@@ -6,6 +6,11 @@
 */
 package jsonreader
 
+import (
+	"strconv"
+	"unicode/utf8"
+)
+
 type reader struct {
 	data      []byte
 	index     int
@@ -73,8 +78,9 @@ func (r *reader) parseString() []byte {
 	return nil
 }
 func unescape(json []byte) string {
-	var str = make([]byte, 0, len(json))
-	for i := 0; i < len(json); i++ {
+	size := len(json)
+	var str = make([]byte, 0, size)
+	for i := 0; i < size; i++ {
 		switch {
 		default:
 			str = append(str, json[i])
@@ -104,10 +110,38 @@ func unescape(json []byte) string {
 				str = append(str, '\t')
 			case '"':
 				str = append(str, '"')
+			case 'u':
+				var v int32
+				if i+4 < size {
+					for j := 0; j < 4; j++ {
+						x, ok := unhex(json[i+j])
+						if !ok {
+							break
+						}
+						v = v<<4 | x
+					}
+				}
+				if v > utf8.MaxRune {
+					break
+				}
+				str = append(str, strconv.AppendInt(nil, int64(v), 10)...)
 			}
 		}
 	}
 	return string(str)
+}
+
+func unhex(b byte) (v rune, ok bool) {
+	c := rune(b)
+	switch {
+	case '0' <= c && c <= '9':
+		return c - '0', true
+	case 'a' <= c && c <= 'f':
+		return c - 'a' + 10, true
+	case 'A' <= c && c <= 'F':
+		return c - 'A' + 10, true
+	}
+	return
 }
 func (r *reader) validObject() bool {
 	r.trim()
