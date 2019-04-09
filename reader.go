@@ -200,6 +200,13 @@ func (r *reader) parseValue() []byte {
 					return []byte("true")
 				}
 			}
+		case 'n':
+			if r.index+4 <= r.end {
+				if r.data[r.index+1] == 'u' && r.data[r.index+2] == 'l' && r.data[r.index+3] == 'l' {
+					r.index += 4
+					return []byte("null")
+				}
+			}
 		}
 		r.index++
 	}

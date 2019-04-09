@@ -78,6 +78,13 @@ func TestJsonValue_Bool(t *testing.T) {
 	obj := ParseJsonObject([]byte("{\"key\":true,\"t\":false}"))
 	v := obj.GetValue("key").Bool()
 	if !v {
-		t.Error("number parse error")
+		t.Error(" parse error")
+	}
+}
+func TestJsonValue_Null(t *testing.T) {
+	obj := ParseJsonObject([]byte("{\"key\":null,\"t\":false}"))
+	v := obj.GetValue("key")
+	if v.IsNull() {
+		t.Error(" parse error")
 	}
 }
