@@ -186,6 +186,20 @@ func (r *reader) parseValue() []byte {
 			if depth == 0 {
 				return r.data[start : r.index+1]
 			}
+		case 'f':
+			if r.index+5 <= r.end {
+				if r.data[r.index+1] == 'a' && r.data[r.index+2] == 'l' && r.data[r.index+3] == 's' && r.data[r.index+4] == 'e' {
+					r.index += 5
+					return []byte("false")
+				}
+			}
+		case 't':
+			if r.index+4 <= r.end {
+				if r.data[r.index+1] == 'r' && r.data[r.index+2] == 'u' && r.data[r.index+3] == 'e' {
+					r.index += 4
+					return []byte("true")
+				}
+			}
 		}
 		r.index++
 	}
