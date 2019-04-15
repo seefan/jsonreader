@@ -88,3 +88,11 @@ func TestJsonValue_Null(t *testing.T) {
 		t.Error(" parse error")
 	}
 }
+
+func TestJsonValue_C(t *testing.T) {
+	obj := ParseJsonObject([]byte("{\"contacts\":{ \"company\":{ \"address\":null, \"state_code\":null }, \"employees\":[ ] }}"))
+	v := obj.GetValue("employees")
+	if v.IsNull() {
+		t.Error(" parse error")
+	}
+}
