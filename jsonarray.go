@@ -57,13 +57,21 @@ func (j *jsonArray) parse() {
 			}
 		case ',':
 			if depth == 0 && str%2 == 0 {
-				j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+				if j.data[start] == '"' {
+					j.arr = append(j.arr, JsonValue(j.data[start+1:j.index-1]))
+				} else {
+					j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+				}
 				start = j.index + 1
 			}
 		}
 		j.index++
 	}
 	if start < j.index {
-		j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+		if j.data[start] == '"' {
+			j.arr = append(j.arr, JsonValue(j.data[start+1:j.index-1]))
+		} else {
+			j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+		}
 	}
 }
