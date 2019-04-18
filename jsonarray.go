@@ -6,32 +6,34 @@
 */
 package jsonreader
 
-type jsonArray struct {
+import "bytes"
+
+type JsonArray struct {
 	reader
 	arr []JsonValue
 }
 
-func (j *jsonArray) Get(i int) JsonValue {
+func (j *JsonArray) Get(i int) JsonValue {
 	return j.arr[i]
 }
-func (j *jsonArray) Size() int {
+func (j *JsonArray) Size() int {
 	return len(j.arr)
 }
-func ParseJsonArray(bs []byte) *jsonArray {
-	j := &jsonArray{
+func ParseJsonArray(bs []byte) *JsonArray {
+	j := &JsonArray{
 		reader: *newReader(bs),
 	}
 	j.parse()
 	return j
 }
-func (j *jsonArray) Each(f func(int, JsonValue)) {
+func (j *JsonArray) Each(f func(int, JsonValue)) {
 	if j.arr != nil {
 		for i, v := range j.arr {
 			f(i, v)
 		}
 	}
 }
-func (j *jsonArray) parse() {
+func (j *JsonArray) parse() {
 	if !j.validArray() {
 		j.LastError = "JsonArray format error"
 		j.end = -1
@@ -40,6 +42,7 @@ func (j *jsonArray) parse() {
 	//remove []
 	j.index++
 	j.end--
+	j.skip()
 	start := j.index
 	str := 0
 	depth := 0
@@ -60,7 +63,7 @@ func (j *jsonArray) parse() {
 				if j.data[start] == '"' {
 					j.arr = append(j.arr, JsonValue(j.data[start+1:j.index-1]))
 				} else {
-					j.arr = append(j.arr, JsonValue(j.data[start:j.index]))
+					j.arr = append(j.arr, JsonValue(bytes.TrimSpace(j.data[start:j.index])))
 				}
 				start = j.index + 1
 			}

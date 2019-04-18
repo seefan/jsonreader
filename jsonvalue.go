@@ -123,9 +123,9 @@ func (v JsonValue) Bytes() []byte {
 func (v JsonValue) IsEmpty() bool {
 	return v == "" || v.IsNull()
 }
-func (v JsonValue) ParseJsonObject() *jsonObject {
+func (v JsonValue) ParseJsonObject() *JsonObject {
 	return ParseJsonObject([]byte(v))
 }
-func (v JsonValue) ParseJsonArray() *jsonArray {
+func (v JsonValue) ParseJsonArray() *JsonArray {
 	return ParseJsonArray([]byte(v))
 }

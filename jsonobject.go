@@ -1,19 +1,19 @@
 /*
 @Time : 2019-03-27 13:54
 @Author : seefan
-@File : jsonObject
+@File : JsonObject
 @Software: jsonreader
 */
 package jsonreader
 
-type jsonObject struct {
+type JsonObject struct {
 	reader
 	val map[string]JsonValue
-	obj map[string]*jsonObject
-	arr map[string]*jsonArray
+	obj map[string]*JsonObject
+	arr map[string]*JsonArray
 }
 
-func (j *jsonObject) parse() {
+func (j *JsonObject) parse() {
 	if !j.validObject() {
 		j.end = -1
 		return
@@ -40,33 +40,33 @@ func (j *jsonObject) parse() {
 	}
 }
 
-func ParseJsonObject(bs []byte) *jsonObject {
-	j := &jsonObject{
+func ParseJsonObject(bs []byte) *JsonObject {
+	j := &JsonObject{
 		reader: *newReader(bs),
 		val:    make(map[string]JsonValue),
 	}
 	j.parse()
 	return j
 }
-func (j *jsonObject) C(name string) bool {
+func (j *JsonObject) C(name string) bool {
 	return j.Contains(name)
 }
-func (j *jsonObject) Contains(name string) bool {
+func (j *JsonObject) Contains(name string) bool {
 	if _, ok := j.val[name]; ok {
 		return true
 	}
 	return false
 }
-func (j *jsonObject) V(name string) JsonValue {
+func (j *JsonObject) V(name string) JsonValue {
 	return j.GetValue(name)
 }
-func (j *jsonObject) GetValue(name string) JsonValue {
+func (j *JsonObject) GetValue(name string) JsonValue {
 	return j.val[name]
 }
-func (j *jsonObject) O(name string) *jsonObject {
+func (j *JsonObject) O(name string) *JsonObject {
 	return j.GetObject(name)
 }
-func (j *jsonObject) GetObject(name string) *jsonObject {
+func (j *JsonObject) GetObject(name string) *JsonObject {
 	if j.obj != nil {
 		if v, ok := j.obj[name]; ok {
 			return v
@@ -74,22 +74,22 @@ func (j *jsonObject) GetObject(name string) *jsonObject {
 	}
 	return j.GetObjectForce(name)
 }
-func (j *jsonObject) GetObjectForce(name string) *jsonObject {
+func (j *JsonObject) GetObjectForce(name string) *JsonObject {
 	if v, ok := j.val[name]; ok {
 		if j.obj == nil {
-			j.obj = make(map[string]*jsonObject)
+			j.obj = make(map[string]*JsonObject)
 		}
 		j.obj[name] = ParseJsonObject(v.Bytes())
 		return j.obj[name]
 	}
-	return &jsonObject{
+	return &JsonObject{
 		val: make(map[string]JsonValue),
 	}
 }
-func (j *jsonObject) A(name string) *jsonArray {
+func (j *JsonObject) A(name string) *JsonArray {
 	return j.GetArray(name)
 }
-func (j *jsonObject) GetArray(name string) *jsonArray {
+func (j *JsonObject) GetArray(name string) *JsonArray {
 	if j.arr != nil {
 		if v, ok := j.arr[name]; ok {
 			return v
@@ -97,13 +97,13 @@ func (j *jsonObject) GetArray(name string) *jsonArray {
 	}
 	return j.GetArrayForce(name)
 }
-func (j *jsonObject) GetArrayForce(name string) *jsonArray {
+func (j *JsonObject) GetArrayForce(name string) *JsonArray {
 	if v, ok := j.val[name]; ok {
 		if j.arr == nil {
-			j.arr = make(map[string]*jsonArray)
+			j.arr = make(map[string]*JsonArray)
 		}
 		j.arr[name] = ParseJsonArray(v.Bytes())
 		return j.arr[name]
 	}
-	return &jsonArray{}
+	return &JsonArray{}
 }
