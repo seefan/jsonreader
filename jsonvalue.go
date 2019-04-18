@@ -121,7 +121,7 @@ func (v JsonValue) Bytes() []byte {
 
 //判断是否为空
 func (v JsonValue) IsEmpty() bool {
-	return v == ""
+	return v == "" || v.IsNull()
 }
 func (v JsonValue) ParseJsonObject() *jsonObject {
 	return ParseJsonObject([]byte(v))
