@@ -57,6 +57,17 @@ func (j *JsonObject) Contains(name string) bool {
 	}
 	return false
 }
+func (j *JsonObject) Left(name string, size int) string {
+	if j.V(name).IsEmpty() {
+		return ""
+	}
+	bs := j.GetValue(name).Bytes()
+	if len(bs) < size {
+		return string(bs)
+	} else {
+		return string(bs[0:size])
+	}
+}
 func (j *JsonObject) V(name string) JsonValue {
 	return j.GetValue(name)
 }

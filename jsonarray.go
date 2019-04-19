@@ -49,9 +49,13 @@ func (j *JsonArray) parse() {
 	for j.index < j.end {
 		switch j.data[j.index] {
 		case '[', '{':
-			depth++
+			if str%2 == 0 {
+				depth++
+			}
 		case ']', '}':
-			depth--
+			if str%2 == 0 {
+				depth--
+			}
 		case '"':
 			str++
 		case '\\':
