@@ -62,10 +62,11 @@ func (j *JsonObject) Left(name string, size int) string {
 		return ""
 	}
 	bs := j.GetValue(name).Bytes()
-	if len(bs) < size {
+	r := []rune(string(bs))
+	if len(r) < size {
 		return string(bs)
 	} else {
-		return string(bs[0:size])
+		return string(r[0:size])
 	}
 }
 func (j *JsonObject) V(name string) JsonValue {
