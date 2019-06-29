@@ -6,7 +6,9 @@
 */
 package jsonreader
 
-import "bytes"
+import (
+	"bytes"
+)
 
 type JsonArray struct {
 	reader
@@ -40,8 +42,10 @@ func (j *JsonArray) parse() {
 		return
 	}
 	//remove []
+	//可以考虑使用，可能性能会更高strings.Index()
 	j.index++
 	j.end--
+
 	j.skip()
 	start := j.index
 	str := 0

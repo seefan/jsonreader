@@ -110,3 +110,9 @@ func TestJsonValue_Kor(t *testing.T) {
 		t.Log(value.ParseJsonObject().V("description"))
 	})
 }
+func TestJsonValue_uncode(t *testing.T) {
+	value := ParseJsonObject([]byte("{\"app_name\":\"Uber Eats: Food Delivery\",\"category\":\"Food \u0026 Drink\",\"category2\":\"\",\"company_id\":\"368677371\",\"company_name\":\"Uber Technologies, Inc.\",\"description\":\"Delicious eats. Delivered easy.\\n\\nHungry? Get the food you want, from the restaurants you love, delivered at Uber speed.\\n\\nEat what you like, where you like, when you like. Find the local flavors you crave, all at the tap of a button. \\n\\nBrowse local restaurants and fast food favorites for inspiration. Or get just what you’re looking for by searching for a specific restaurant, dish, or cuisine. Pizza. Burritos. Burgers. Sushi. If you're hungry for it, try Uber Eats.\\n\\nWhen you’re ready to place your order, you’ll see your delivery address, an estimated delivery time, and the total price including tax and booking fee. Tap to seamlessly pay with your Uber account, or add a credit card. Track your order in real-time as it heads your way.\\n\\nUber Eats is currently available in cities and metro areas including Abu Dhabi, Adelaide, Amsterdam, Atlanta, Auckland, Austin, Baltimore, Bangkok, Bogota, Brisbane, Brussels, Cape Town, Chicago, Dallas, Denver, Dubai, Hong Kong, Johannesburg, Glas\",\"icon\":\"https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/8c/52/c3/8c52c314-e9de-0631-8716-4552e5095eab/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-7.jpeg/1024x1024bb.png\",\"init_release_date\":\"2016-03-01\",\"kind_id\":\"0\",\"last_release_date\":\"2019-04-23\",\"platform\":0}"))
+
+	t.Log(value.val)
+
+}

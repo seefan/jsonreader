@@ -27,7 +27,7 @@ func (j *JsonObject) parse() {
 		if !j.IsValid() {
 			break
 		}
-		key := unescape(j.parseString())
+		key := string(unescape(j.parseString()))
 		j.skipSplit()
 		if !j.IsValid() {
 			break

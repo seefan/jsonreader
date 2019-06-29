@@ -77,7 +77,7 @@ func (r *reader) parseString() []byte {
 	r.end = -1
 	return nil
 }
-func unescape(json []byte) string {
+func unescape(json []byte) []byte {
 	size := len(json)
 	var str = make([]byte, 0, size)
 	for i := 0; i < size; i++ {
@@ -89,11 +89,11 @@ func unescape(json []byte) string {
 		case json[i] == '\\':
 			i++
 			if i >= len(json) {
-				return string(str)
+				return str
 			}
 			switch json[i] {
 			default:
-				return string(str)
+				return str
 			case '\\':
 				str = append(str, '\\')
 			case '/':
@@ -114,7 +114,7 @@ func unescape(json []byte) string {
 				var v int32
 				if i+4 < size {
 					for j := 0; j < 4; j++ {
-						x, ok := unhex(json[i+j])
+						x, ok := unHex(json[i+j])
 						if !ok {
 							break
 						}
@@ -128,10 +128,10 @@ func unescape(json []byte) string {
 			}
 		}
 	}
-	return string(str)
+	return str
 }
 
-func unhex(b byte) (v rune, ok bool) {
+func unHex(b byte) (v rune, ok bool) {
 	c := rune(b)
 	switch {
 	case '0' <= c && c <= '9':
@@ -173,7 +173,7 @@ func (r *reader) parseValue() []byte {
 		switch r.data[r.index] {
 		case '"': //string
 			if depth == 0 {
-				return r.parseString()
+				return unescape(r.parseString())
 			}
 		case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9': //number
 			if depth == 0 {
