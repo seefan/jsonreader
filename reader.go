@@ -84,8 +84,8 @@ func unescape(json []byte) []byte {
 		switch {
 		default:
 			str = append(str, json[i])
-		case json[i] < ' ': //skip
-		case json[i] > '~': //skip
+		//case json[i] < ' ': //skip
+		//case json[i] > '~': //skip
 		case json[i] == '\\':
 			i++
 			if i >= len(json) {
